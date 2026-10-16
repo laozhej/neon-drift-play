@@ -1,16 +1,16 @@
 <!doctype html>
-<!-- Neon Drift v0.6.0: self-contained offline edition. -->
+<!-- Neon Drift v0.6.1: self-contained offline edition. -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#080d15">
   <meta name="description" data-i18n-content="Neon Drift — three sectors, three bosses, one expedition. An offline arcade shooter." content="Neon Drift — three sectors, three bosses, one expedition. An offline arcade shooter.">
   <title data-i18n="Neon Drift — Finale">Neon Drift — Finale</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%237bffe1' d='M16 2 29 28 16 23 3 28Z'/%3E%3C/svg%3E">
   <style>
 @charset "UTF-8";
-:root { color-scheme:dark; --bg:#060c14; --panel:#0e1926; --text:#eef6fa; --muted:#afc1cf; --dim:#8199ad; --line:#25394a; --mint:#8bffe0; --pink:#ff91b5; --ice:#95cfff; --ui-scale:1.25; --target-field-h:10000px; --chrome-h:200px; --available-field-w:calc(100vw - 40px); --field-h:min(var(--target-field-h), max(150px, calc(100dvh - var(--chrome-h))), calc(var(--available-field-w) * 1.5)); font:calc(16px * var(--ui-scale)) "Segoe UI",Arial,"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif; }
+:root { color-scheme:dark; --bg:#060c14; --panel:#0e1926; --text:#eef6fa; --muted:#afc1cf; --dim:#8199ad; --line:#25394a; --mint:#8bffe0; --pink:#ff91b5; --ice:#95cfff; --ui-scale:1.25; --target-field-h:10000px; --chrome-h:200px; --available-field-w:calc(100vw - 40px); --field-h:min(var(--target-field-h), max(150px, calc(var(--viewport-h, 100dvh) - var(--chrome-h))), calc(var(--available-field-w) * 1.5)); font:calc(16px * var(--ui-scale)) "Segoe UI",Arial,"Microsoft YaHei","PingFang SC","Noto Sans CJK SC",sans-serif; }
 * { box-sizing:border-box; }
 [hidden] { display:none !important; }
 body { margin:0; min-height:100dvh; color:var(--text); background:radial-gradient(ellipse at 50% 0%,#19304775,transparent 55%),radial-gradient(ellipse at 6% 60%,#0d454323,transparent 40%),linear-gradient(90deg,#a9dfff03 1px,transparent 1px),linear-gradient(#a9dfff03 1px,transparent 1px),var(--bg); background-size:auto,auto,56px 56px,56px 56px,auto; }
@@ -377,13 +377,120 @@ body[data-mode="playing"] .loadout #graze-count { display:none; }
 @media (max-width:380px) { .manual-dialog .control-list { grid-template-columns:1fr; }.fighter-skill-label { max-width:3.6rem; }.fighter-profile { max-width:100%; }.fighter-preview-icon { opacity:.15; } }
 @media (max-height:700px) { .fighter-console { margin-bottom:1.3rem; }.console-note { display:none; }.campaign-route li { padding:12px 0; }.manual-dialog .hitbox-tip { display:flex; } }
 
+/* Touch controls stay outside the flight area, leaving the ship and bullets visible. */
+body[data-movement="touch"] #game { touch-action:none; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; }
+body[data-movement="touch"] [data-desktop-controls],
+body[data-movement="touch"] .title-screen .keyboard-note,
+body[data-movement="touch"] .skill-readout kbd,
+body[data-movement="touch"] .fighter-skill-label kbd,
+body[data-movement="touch"] #pause-button { display:none; }
+.touch-intro { color:var(--mint); font-size:12px; line-height:1.5; margin:12px 0 0; max-width:28ch; }
+.touch-controls { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; padding-top:10px; }
+.touch-action { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; min-width:0; min-height:56px; padding:8px 4px; border:1px solid #40596b; border-radius:6px; color:var(--text); background:#152431; font:600 13px "Segoe UI","Microsoft YaHei",sans-serif; touch-action:none; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; }
+.touch-action small { color:var(--muted); font:11px Consolas,"Microsoft YaHei",monospace; }
+.touch-bomb { border-color:#856743; color:#ffd39f; }
+.touch-skill { border-color:#44796c; color:var(--mint); }
+.touch-action:active:not(:disabled) { background:#29423f; border-color:var(--mint); }
+.touch-action:disabled { opacity:.45; cursor:default; }
+.touch-hint { margin:0; padding:6px 0 2px; text-align:center; color:var(--muted); font-size:11px; line-height:1.5; }
+.hitbox-setting { flex-wrap:nowrap; }
+.hitbox-setting>span { flex:1; }
+.hitbox-setting input { flex-shrink:0; width:24px; height:24px; margin:10px; accent-color:var(--mint); cursor:pointer; }
+.touch-manual p { line-height:1.7; }
+body[data-movement="touch"] .overlay .primary,
+body[data-movement="touch"] .overlay .secondary,
+body[data-movement="touch"] .mode-launcher { min-height:44px; }
+body[data-movement="touch"] .overlay .primary,
+body[data-movement="touch"] .overlay .secondary { font-size:max(12px,calc(2.4cqw * var(--ui-scale))); }
+body[data-movement="touch"] .mode-launcher-copy strong { font-size:max(13px,calc(2.65cqw * var(--ui-scale))); }
+body[data-movement="touch"] .mode-label { font-size:max(10px,calc(1.35cqw * var(--ui-scale))); }
+body[data-movement="touch"] .mode-launcher-copy small { font-size:max(10px,calc(1.65cqw * var(--ui-scale))); }
+body[data-movement="touch"] .menu-screen .text-button { min-height:44px; font-size:12px; padding:10px 4px; margin-top:0; }
+body[data-movement="touch"] #resume-hint { font-size:11px; }
+@media (max-width:600px) {
+  body[data-movement="touch"] .arcade { padding:max(6px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left)); }
+  body[data-movement="touch"] .topbar { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:4px; padding:0 0 6px; min-height:0; }
+  body[data-movement="touch"] .top-actions { display:contents; }
+  body[data-movement="touch"] .wordmark { grid-column:1 / 3; grid-row:1; gap:5px; font-size:10px; letter-spacing:.5px; min-height:44px; white-space:nowrap; }
+  body[data-movement="touch"] .brand-mark { width:18px; height:22px; }
+  body[data-movement="touch"] .top-actions .utility { min-height:44px; min-width:0; width:100%; font-size:12px; padding:6px; margin:0; }
+  body[data-movement="touch"] #movement-select { grid-column:3 / 5; grid-row:1; }
+  body[data-movement="touch"] #language-select { grid-column:5 / 7; grid-row:1; }
+  body[data-movement="touch"] #manual-button { grid-column:1 / 3; grid-row:2; }
+  body[data-movement="touch"] #display-button { grid-column:3 / 5; grid-row:2; }
+  body[data-movement="touch"] #mute-button { grid-column:5 / 7; grid-row:2; }
+  body[data-movement="touch"] #controls-button { display:none; }
+  body[data-movement="touch"][data-mode="playing"] .wordmark,
+  body[data-movement="touch"][data-mode="playing"] #movement-select,
+  body[data-movement="touch"][data-mode="playing"] #language-select { display:none; }
+  body[data-movement="touch"][data-mode="playing"] #manual-button,
+  body[data-movement="touch"][data-mode="playing"] #display-button,
+  body[data-movement="touch"][data-mode="playing"] #mute-button { grid-row:1; }
+  body[data-movement="touch"] .station { padding-top:8px; }
+  body[data-movement="touch"] .hud { min-height:0; row-gap:5px; padding-bottom:7px; }
+  body[data-movement="touch"] .hud-label { font-size:10px; margin-bottom:3px; }
+  body[data-movement="touch"] .hud strong { font-size:17px; }
+  body[data-movement="touch"] .resources strong { font-size:14px; }
+  body[data-movement="touch"] .loadout { font-size:10px; padding-top:4px; gap:4px; }
+  body[data-movement="touch"] .compact-best,
+  body[data-movement="touch"] .skill-readout,
+  body[data-movement="touch"] .page-footer { display:none; }
+  body[data-movement="touch"] .game-footer { font-size:10px; min-height:26px; padding:6px 0; }
+  body[data-movement="touch"] .title-screen { padding:14px 18px; }
+  body[data-movement="touch"] .title-screen h1 { font-size:17cqw; }
+  body[data-movement="touch"] .title-kicker { font-size:10px; margin:0 0 10px; }
+  body[data-movement="touch"] .tagline { font-size:9px; margin-top:10px; }
+  body[data-movement="touch"] .title-description,
+  body[data-movement="touch"] .title-rule { display:none; }
+  body[data-movement="touch"] .hangar-launcher { margin-top:14px; }
+  body[data-movement="touch"] .mode-launcher { padding:7px 10px; margin-bottom:8px; }
+  body[data-movement="touch"] .mode-launcher-copy small { display:none; }
+  body[data-movement="touch"] .title-screen .primary { min-height:48px; margin-top:2px; }
+  body[data-movement="touch"] .menu-screen { padding:14px 16px; }
+  body[data-movement="touch"] .menu-screen h2 { font-size:24px; }
+  body[data-movement="touch"] .menu-screen>p:not(.eyebrow) { font-size:12px; }
+  body[data-movement="touch"] .menu-icon { width:44px; height:44px; font-size:28px; margin-bottom:8px; }
+  body[data-movement="touch"] .display-dialog { padding:16px; max-height:calc(100dvh - 32px); }
+  body[data-movement="touch"] .display-dialog .utility,
+  body[data-movement="touch"] .display-setting select { min-height:44px; }
+  body[data-movement="touch"] .display-setting { font-size:14px; gap:8px; padding:14px 0; }
+  body[data-movement="touch"] .display-setting small { font-size:12px; }
+}
+/* On a short landscape screen, place controls in the empty side gutters. */
+@media (orientation:landscape) and (max-height:520px) {
+  body[data-movement="touch"] .arcade { padding:max(8px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left)); }
+  body[data-movement="touch"] .topbar { position:fixed; z-index:3; left:max(12px,env(safe-area-inset-left)); top:max(12px,env(safe-area-inset-top)); width:calc((100vw - var(--field-h) * 2 / 3) / 2 - 28px); min-height:0; display:flex; flex-direction:column; gap:8px; padding:0; border:0; }
+  body[data-movement="touch"] .wordmark { min-height:24px; font-size:11px; gap:6px; }
+  body[data-movement="touch"] .brand-mark { width:20px; height:22px; }
+  body[data-movement="touch"] .top-actions { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin:0; width:100%; }
+  body[data-movement="touch"] .top-actions .utility { min-height:44px; font-size:11px; padding:6px; min-width:0; }
+  body[data-movement="touch"] #controls-button { display:none; }
+  body[data-movement="touch"] #mute-button { grid-column:1 / -1; }
+  body[data-movement="touch"] .station { padding-top:0; }
+  body[data-movement="touch"] .compact-best,
+  body[data-movement="touch"] .skill-readout,
+  body[data-movement="touch"] .page-footer,
+  body[data-movement="touch"] #touch-hint { display:none; }
+  body[data-movement="touch"] .touch-controls { position:fixed; z-index:3; right:max(16px,env(safe-area-inset-right)); bottom:max(16px,env(safe-area-inset-bottom)); width:min(160px,calc((100vw - var(--field-h) * 2 / 3) / 2 - 36px)); grid-template-columns:1fr; padding:0; }
+  body[data-movement="touch"] .title-screen { padding:10px; }
+  body[data-movement="touch"] .title-screen h1 { font-size:12cqw; }
+  body[data-movement="touch"] .title-kicker,
+  body[data-movement="touch"] .tagline,
+  body[data-movement="touch"] .title-rule,
+  body[data-movement="touch"] .title-description { display:none; }
+  body[data-movement="touch"] .mode-launcher { padding:6px; margin-bottom:6px; }
+  body[data-movement="touch"] .hangar-launcher { margin-top:10px; }
+  body[data-movement="touch"] .mode-launcher-copy small { display:none; }
+  body[data-movement="touch"] .touch-intro { font-size:10px; margin-top:8px; }
+}
+
 </style>
 </head>
 <body>
   <main class="arcade">
     <header class="topbar">
-      <a class="wordmark" href="" data-i18n-aria-label="Neon Drift home" aria-label="Neon Drift home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none" focusable="false"><path d="M18 3 32 29 22 25 18 31 14 25 4 29Z" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.5"/><path d="m18 8 5 16-5-3-5 3Z" fill="currentColor"/><path d="M18 25v8M7 14l-3 5m25-5 3 5" stroke="currentColor" stroke-opacity=".65"/></svg></span> NEON DRIFT<span class="edition" data-i18n="FINALE / 0.6.0">FINALE / 0.6.0</span></a>
-      <div class="top-actions"><span class="online"><i></i> <span data-i18n="SYSTEM READY">SYSTEM READY</span></span><button id="manual-button" class="utility" aria-haspopup="dialog" aria-controls="manual-dialog" data-i18n="MANUAL">MANUAL</button><button id="controls-button" class="utility" aria-haspopup="dialog" data-i18n="CONTROLS">CONTROLS</button><button id="display-button" class="utility" aria-haspopup="dialog" data-i18n="DISPLAY">DISPLAY</button><button id="mute-button" class="utility" aria-label="Mute sound" aria-pressed="false">SOUND ON <span>M</span></button><select id="movement-select" class="utility movement-select" data-i18n-aria-label="Movement control" aria-label="Movement control" data-i18n-title="Movement control" title="Movement control"><option value="keyboard" data-i18n="Keyboard">Keyboard</option><option value="mouse" data-i18n="Mouse">Mouse</option></select><select id="language-select" class="utility language-select" aria-label="Language / 语言"><option value="en" lang="en">English</option><option value="zh-CN" lang="zh-CN">简体中文</option></select></div>
+      <a class="wordmark" href="" data-i18n-aria-label="Neon Drift home" aria-label="Neon Drift home"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none" focusable="false"><path d="M18 3 32 29 22 25 18 31 14 25 4 29Z" fill="currentColor" fill-opacity=".1" stroke="currentColor" stroke-width="1.5"/><path d="m18 8 5 16-5-3-5 3Z" fill="currentColor"/><path d="M18 25v8M7 14l-3 5m25-5 3 5" stroke="currentColor" stroke-opacity=".65"/></svg></span> NEON DRIFT<span class="edition" data-i18n="FINALE / 0.6.1">FINALE / 0.6.1</span></a>
+      <div class="top-actions"><span class="online"><i></i> <span data-i18n="SYSTEM READY">SYSTEM READY</span></span><button id="manual-button" class="utility" aria-haspopup="dialog" aria-controls="manual-dialog" data-i18n="MANUAL">MANUAL</button><button id="controls-button" class="utility" aria-haspopup="dialog" data-i18n="CONTROLS">CONTROLS</button><button id="display-button" class="utility" aria-haspopup="dialog" data-i18n="DISPLAY">DISPLAY</button><button id="mute-button" class="utility" aria-label="Mute sound" aria-pressed="false">SOUND ON <span>M</span></button><select id="movement-select" class="utility movement-select" data-i18n-aria-label="Movement control" aria-label="Movement control" data-i18n-title="Movement control" title="Movement control"><option value="keyboard" data-i18n="Keyboard">Keyboard</option><option value="mouse" data-i18n="Mouse">Mouse</option><option value="touch" data-i18n="Touch">Touch</option></select><select id="language-select" class="utility language-select" aria-label="Language / 语言"><option value="en" lang="en">English</option><option value="zh-CN" lang="zh-CN">简体中文</option></select></div>
     </header>
 
     <div class="station">
@@ -410,7 +517,7 @@ body[data-mode="playing"] .loadout #graze-count { display:none; }
           <canvas id="game" width="480" height="720" tabindex="0" data-i18n-aria-label="Vertical scrolling space shooter. Use arrow keys or WASD to move, Z or Space to fire, Shift to focus, X to bomb, Escape to pause." aria-label="Vertical scrolling space shooter. Use arrow keys or WASD to move, Z or Space to fire, Shift to focus, X to bomb, Escape to pause."></canvas>
           <div class="overlay title-screen" id="title-screen">
             <div class="title-art" aria-hidden="true"></div>
-            <p class="eyebrow title-kicker"><span class="status-dot"></span> <span data-i18n="FINALE / 0.6.0">FINALE / 0.6.0</span></p>
+            <p class="eyebrow title-kicker"><span class="status-dot"></span> <span data-i18n="FINALE / 0.6.1">FINALE / 0.6.1</span></p>
             <h1><span>NEON</span><br>DRIFT<span class="title-period">.</span></h1>
             <p class="tagline" data-i18n="THREE SECTORS. ONE WAY THROUGH.">THREE SECTORS. ONE WAY THROUGH.</p>
             <div class="title-rule"></div>
@@ -422,7 +529,8 @@ body[data-mode="playing"] .loadout #graze-count { display:none; }
               <span class="mode-launcher-arrow" aria-hidden="true">⌁</span>
             </button>
             <button class="primary" id="start-button"><span data-i18n="INITIATE FLIGHT">INITIATE FLIGHT</span> <span aria-hidden="true">↗</span></button>
-            <div class="title-controls"><span data-movement="keyboard"><kbd data-binding="movement">WASD / ↑↓←→</kbd> <span data-i18n="MOVE">MOVE</span></span><span data-movement="mouse" hidden><kbd data-i18n="MOUSE">MOUSE</kbd> <span data-i18n="MOVE">MOVE</span></span><span><kbd data-binding="fire">Z / SPACE</kbd> <span data-i18n="FIRE">FIRE</span></span><span><kbd data-binding="focus">SHIFT</kbd> <span id="focus-label" data-i18n="FOCUS">FOCUS</span></span><span><kbd data-binding="bomb">X</kbd> <span data-i18n="BOMB">BOMB</span> · <kbd data-binding="pause">ESC</kbd> <span data-i18n="PAUSE">PAUSE</span></span></div>
+            <div class="title-controls" data-desktop-controls><span data-movement="keyboard"><kbd data-binding="movement">WASD / ↑↓←→</kbd> <span data-i18n="MOVE">MOVE</span></span><span data-movement="mouse" hidden><kbd data-i18n="MOUSE">MOUSE</kbd> <span data-i18n="MOVE">MOVE</span></span><span><kbd data-binding="fire">Z / SPACE</kbd> <span data-i18n="FIRE">FIRE</span></span><span><kbd data-binding="focus">SHIFT</kbd> <span id="focus-label" data-i18n="FOCUS">FOCUS</span></span><span><kbd data-binding="bomb">X</kbd> <span data-i18n="BOMB">BOMB</span> · <kbd data-binding="pause">ESC</kbd> <span data-i18n="PAUSE">PAUSE</span></span></div>
+            <p class="touch-intro" data-movement="touch" hidden data-i18n="Drag anywhere to move. Hold to auto-fire.">Drag anywhere to move. Hold to auto-fire.</p>
             <p class="mouse-hint" data-movement="mouse" hidden data-i18n="Move the mouse to steer. No mouse button needed.">Move the mouse to steer. No mouse button needed.</p>
             <p class="keyboard-note"><kbd data-binding="skill">C</kbd> <span data-i18n="SHIP SKILL">SHIP SKILL</span> · <span data-i18n="HOLD FIRE TO SHOOT">HOLD FIRE TO SHOOT</span></p>
           </div>
@@ -447,6 +555,12 @@ body[data-mode="playing"] .loadout #graze-count { display:none; }
           </div>
         </div>
         <div class="game-footer"><span><i class="status-dot"></i><span id="stage-label">AWAITING PILOT</span></span><button id="pause-button" class="text-button" hidden><span data-i18n="PAUSE">PAUSE</span> <kbd data-binding="pause">ESC</kbd></button><span id="stage-clock">00:00 / 02:00</span></div>
+        <div id="touch-controls" class="touch-controls" role="group" data-i18n-aria-label="Touch flight controls" aria-label="Touch flight controls" hidden>
+          <button type="button" id="touch-bomb" class="touch-action touch-bomb" disabled><span data-i18n="BOMB">BOMB</span><small id="touch-bomb-count">2 LEFT</small></button>
+          <button type="button" id="touch-skill" class="touch-action touch-skill" disabled><span data-i18n="SKILL">SKILL</span><small id="touch-skill-status">READY</small></button>
+          <button type="button" id="touch-pause" class="touch-action"><span id="touch-pause-label" data-i18n="PAUSE">PAUSE</span><small aria-hidden="true">Ⅱ</small></button>
+        </div>
+        <p id="touch-hint" class="touch-hint" hidden>Drag to move · hold to auto-fire · lift to stop firing</p>
       </section>
 
       <aside class="side-panel flight-manual">
@@ -458,7 +572,7 @@ body[data-mode="playing"] .loadout #graze-count { display:none; }
         </div>        <div class="best-score"><p class="eyebrow" data-i18n="PERSONAL BEST">PERSONAL BEST</p><strong id="best">000000</strong><span data-i18n="SAVED ON THIS DEVICE">SAVED ON THIS DEVICE</span></div>
       </aside>
     </div>
-    <footer class="page-footer"><span data-i18n="BUILT FOR THE FLOW STATE">BUILT FOR THE FLOW STATE</span><span data-i18n="FINALE / 0.6.0">FINALE / 0.6.0</span></footer>
+    <footer class="page-footer"><span data-i18n="BUILT FOR THE FLOW STATE">BUILT FOR THE FLOW STATE</span><span data-i18n="FINALE / 0.6.1">FINALE / 0.6.1</span></footer>
   </main>
   <dialog id="hangar-dialog" class="display-dialog hangar-dialog" aria-labelledby="hangar-title" aria-describedby="hangar-intro hangar-note">
     <form method="dialog">
@@ -478,7 +592,8 @@ body[data-mode="playing"] .loadout #graze-count { display:none; }
   <dialog id="manual-dialog" class="display-dialog manual-dialog" aria-labelledby="manual-title">
     <form method="dialog">
       <div class="display-heading"><h2 id="manual-title" data-i18n="FLIGHT MANUAL">FLIGHT MANUAL</h2><button class="utility" data-i18n-aria-label="Close flight manual" aria-label="Close flight manual">✕</button></div>        <p class="manual-intro" data-i18n="Follow the signal through a broken orbit, a crystal reef, and the heart of a dying star.">Follow the signal through a broken orbit, a crystal reef, and the heart of a dying star.</p>
-        <dl class="control-list"><div data-movement="keyboard"><dt><kbd data-binding="movement">WASD / ↑↓←→</kbd></dt><dd data-i18n="Steer your ship">Steer your ship</dd></div><div data-movement="mouse" hidden><dt><kbd data-i18n="MOUSE">MOUSE</kbd></dt><dd data-i18n="Move to steer. No button held.">Move to steer. No button held.</dd></div><div><dt><kbd data-binding="fire">Z / SPACE</kbd></dt><dd data-i18n="Hold to fire">Hold to fire</dd></div><div><dt><kbd data-binding="focus">SHIFT</kbd></dt><dd id="focus-hint" data-i18n="Slow down. See your hitbox.">Slow down. See your hitbox.</dd></div><div><dt><kbd data-binding="bomb">X</kbd></dt><dd data-i18n="Clear the screen with a bomb">Clear the screen with a bomb</dd></div><div><dt><kbd data-binding="pause">ESC</kbd></dt><dd data-i18n="Pause your flight">Pause your flight</dd></div><div><dt><kbd data-binding="skill">C</kbd></dt><dd data-i18n="Activate your fighter skill">Activate your fighter skill</dd></div></dl>
+        <div class="touch-manual" data-movement="touch" hidden><p data-i18n="Drag anywhere in the playfield to move. Hold to auto-fire. Use the buttons below for bomb, skill and pause.">Drag anywhere in the playfield to move. Hold to auto-fire. Use the buttons below for bomb, skill and pause.</p><p data-i18n="Lift your finger to stop firing. Touch again anywhere without moving your ship.">Lift your finger to stop firing. Touch again anywhere without moving your ship.</p><p data-i18n="Turn Always show hitbox on or off in DISPLAY. Touch movement has no Shift slowdown.">Turn Always show hitbox on or off in DISPLAY. Touch movement has no Shift slowdown.</p></div>
+        <dl class="control-list" data-desktop-controls><div data-movement="keyboard"><dt><kbd data-binding="movement">WASD / ↑↓←→</kbd></dt><dd data-i18n="Steer your ship">Steer your ship</dd></div><div data-movement="mouse" hidden><dt><kbd data-i18n="MOUSE">MOUSE</kbd></dt><dd data-i18n="Move to steer. No button held.">Move to steer. No button held.</dd></div><div><dt><kbd data-binding="fire">Z / SPACE</kbd></dt><dd data-i18n="Hold to fire">Hold to fire</dd></div><div><dt><kbd data-binding="focus">SHIFT</kbd></dt><dd id="focus-hint" data-i18n="Slow down. See your hitbox.">Slow down. See your hitbox.</dd></div><div><dt><kbd data-binding="bomb">X</kbd></dt><dd data-i18n="Clear the screen with a bomb">Clear the screen with a bomb</dd></div><div><dt><kbd data-binding="pause">ESC</kbd></dt><dd data-i18n="Pause your flight">Pause your flight</dd></div><div><dt><kbd data-binding="skill">C</kbd></dt><dd data-i18n="Activate your fighter skill">Activate your fighter skill</dd></div></dl>
         <div class="supply-guide"><span class="pickup-power">P</span><p data-i18n="Power up to level 3">Power up to level 3</p><span class="pickup-bomb">B</span><p data-i18n="Add a screen-clearing bomb">Add a screen-clearing bomb</p><span class="pickup-shield">S</span><p data-i18n="Block one hit">Block one hit</p></div>
         <div class="hitbox-tip"><span class="hitbox-symbol" aria-hidden="true">✧</span><p data-i18n="Only your center takes damage. Graze a bullet once for +25 points.">Only your center takes damage. Graze a bullet once for +25 points.</p></div>
       <div class="display-actions"><button class="utility manual-done" data-i18n="DONE">DONE</button></div></form></dialog>
@@ -520,6 +635,7 @@ body[data-mode="playing"] .loadout #graze-count { display:none; }
     <form method="dialog">
       <div class="display-heading"><h2 id="display-title" data-i18n="Make yourself comfortable.">Make yourself comfortable.</h2><button class="utility" data-i18n-aria-label="Close display settings" aria-label="Close display settings" autofocus>✕</button></div>
       <p id="display-description" data-i18n="Adjust the menus, text, and playfield to suit your screen.">Adjust the menus, text, and playfield to suit your screen.</p>
+      <label class="display-setting hitbox-setting" for="always-show-hitbox"><span><span data-i18n="Always show hitbox">Always show hitbox</span><small data-i18n="Keep the center hitbox visible without slowing down.">Keep the center hitbox visible without slowing down.</small></span><input type="checkbox" id="always-show-hitbox"></label>
       <label class="display-setting" for="ui-size"><span><span data-i18n="UI text size">UI text size</span><small data-i18n="Menus, score, and flight manual">Menus, score, and flight manual</small></span><select id="ui-size"><option value="100">100%</option><option value="125" selected data-i18n="125% · default">125% · default</option><option value="150">150%</option></select></label>
       <label class="display-setting" for="game-size"><span><span data-i18n="Playfield size">Playfield size</span><small data-i18n="Always fits your window">Always fits your window</small></span><select id="game-size"><option value="auto" data-i18n="Auto fit · default">Auto fit · default</option><option value="100">100% · 480 × 720</option><option value="125">125% · 600 × 900</option><option value="150">150% · 720 × 1080</option></select></label>
       <p class="display-hint" data-i18n="Auto fit uses the available space. Larger sizes are limited by your window. Fullscreen gives you more room to fly.">Auto fit uses the available space. Larger sizes are limited by your window. Fullscreen gives you more room to fly.</p>
@@ -1724,6 +1840,7 @@ class Input {
     this.canvas = canvas;
     this.movementMode = 'keyboard';
     this.pointer = null;
+    this.touch = null;
     this.compatibilityMouseBlocked = false;
     this.acceptedMouseGestures = new Set();
     this.setBindings();
@@ -1745,6 +1862,10 @@ class Input {
         && !actions.isUiActive?.() && !nativeControl(event.target)) event.preventDefault();
     });
     target.addEventListener('blur', () => { this.clear(); actions.blur(); });
+    // Rotation and viewport changes invalidate a finger's previous CSS coordinates.
+    // Require a fresh touch without interrupting held desktop controls on resize.
+    for (const event of ['resize', 'orientationchange']) target.addEventListener(event, () => this.clearTouch());
+    target.visualViewport?.addEventListener('resize', () => this.clearTouch());
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) { this.clear(); actions.blur(); }
     });
@@ -1756,6 +1877,23 @@ class Input {
     // mousedown/up, which fire for every button transition, including held-button chords.
     mouseSurface?.addEventListener('pointerdown', (event) => {
       this.compatibilityMouseBlocked = event.pointerType !== 'mouse';
+    });
+    canvas?.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
+      this.compatibilityMouseBlocked = true;
+      if (event.target !== canvas || !this.canUseTouch() || this.touch
+        || !Number.isInteger(event.pointerId) || !Number.isFinite(event.clientX) || !Number.isFinite(event.clientY)) return;
+      const position = actions.getPlayerPosition?.();
+      if (!Number.isFinite(position?.x) || !Number.isFinite(position?.y)) return;
+      event.preventDefault();
+      this.touch = {
+        pointerId: event.pointerId, clientX: event.clientX, clientY: event.clientY,
+        x: Math.max(17, Math.min(WIDTH - 17, position.x)),
+        y: Math.max(22, Math.min(HEIGHT - 22, position.y)),
+      };
+      // Relative dragging starts at the ship, so touching a new spot never teleports it.
+      try { canvas.setPointerCapture?.(event.pointerId); }
+      catch { this.clearTouch(); }
     });
     // A fresh press supersedes any gesture whose release was lost outside the
     // browser. Run before the playfield accepts that new press, without blocking it.
@@ -1785,6 +1923,21 @@ class Input {
       this.releaseMissingMouseButtons(event.buttons);
     });
     canvas?.addEventListener('pointermove', (event) => {
+      if (event.pointerId === this.touch?.pointerId && this.touch) {
+        if (!this.canUseTouch()) { this.clearTouch(); return; }
+        const { width, height } = canvas.getBoundingClientRect();
+        if (![event.clientX, event.clientY, width, height].every(Number.isFinite) || width <= 0 || height <= 0) {
+          this.clearTouch();
+          return;
+        }
+        event.preventDefault();
+        this.touch.x = Math.max(17, Math.min(WIDTH - 17, this.touch.x + (event.clientX - this.touch.clientX) / width * WIDTH));
+        this.touch.y = Math.max(22, Math.min(HEIGHT - 22, this.touch.y + (event.clientY - this.touch.clientY) / height * HEIGHT));
+        // Update even at an edge; reversing the finger should move the ship immediately.
+        this.touch.clientX = event.clientX;
+        this.touch.clientY = event.clientY;
+        return;
+      }
       if (event.pointerType !== 'mouse') return;
       this.compatibilityMouseBlocked = false;
       this.releaseMissingMouseButtons(event.buttons);
@@ -1799,7 +1952,12 @@ class Input {
     for (const event of ['pointerleave', 'pointercancel', 'mouseleave']) {
       canvas?.addEventListener(event, () => { this.clearMouse(); });
     }
-    target.addEventListener('pointercancel', () => { this.clearMouse(); });
+    const releaseTouch = (event) => {
+      if (this.touch && event.pointerId === this.touch.pointerId) this.clearTouch();
+    };
+    target.addEventListener('pointerup', releaseTouch);
+    target.addEventListener('pointercancel', (event) => { releaseTouch(event); this.clearMouse(); });
+    canvas?.addEventListener('lostpointercapture', releaseTouch);
     for (const name of ['contextmenu', 'auxclick']) {
       mouseSurface?.addEventListener(name, (event) => {
         if (!this.isRealMouse(event) || actions.isUiActive?.() || (!actions.isPlaying() && !actions.isPaused?.())
@@ -1842,8 +2000,23 @@ class Input {
     this.pointer = null;
   }
 
+  canUseTouch() {
+    return this.movementMode === 'touch' && this.actions.isPlaying() && !this.actions.isUiActive?.()
+      && (this.actions.isTouchActive?.() ?? true);
+  }
+
+  clearTouch() {
+    const pointerId = this.touch?.pointerId;
+    this.touch = null;
+    if (pointerId === undefined) return;
+    // Clearing first also makes the subsequent lostpointercapture event harmless.
+    try {
+      if (this.canvas?.hasPointerCapture?.(pointerId)) this.canvas.releasePointerCapture(pointerId);
+    } catch { /* The browser may already have released a cancelled or detached pointer. */ }
+  }
+
   setMovementMode(mode) {
-    if (mode !== 'keyboard' && mode !== 'mouse') throw new RangeError(`Unsupported movement mode: ${mode}`);
+    if (!['keyboard', 'mouse', 'touch'].includes(mode)) throw new RangeError(`Unsupported movement mode: ${mode}`);
     if (mode === this.movementMode) return;
     this.movementMode = mode;
     this.clear();
@@ -1868,6 +2041,12 @@ class Input {
 
   sample() {
     if (!this.actions.isPlaying() || this.actions.isUiActive?.()) this.clearMouse();
+    if (this.movementMode === 'touch') {
+      if (!this.canUseTouch()) this.clearTouch();
+      const sample = { x: 0, y: 0, shooting: Boolean(this.touch), focus: false };
+      if (this.touch) sample.pointer = { x: this.touch.x, y: this.touch.y };
+      return sample;
+    }
     const has = (action) => this.bindings[action].some((code) => code && this.keys.has(code));
     const sample = {
       x: this.movementMode === 'mouse' ? 0 : Number(has('right')) - Number(has('left')),
@@ -1882,7 +2061,7 @@ class Input {
     return sample;
   }
 
-  clear() { this.keys.clear(); this.pointer = null; }
+  clear() { this.keys.clear(); this.pointer = null; this.clearTouch(); }
 }
 
 return Object.freeze({ get Input() { return Input; } });
@@ -1897,7 +2076,23 @@ const LANGUAGES = new Set(['en', 'zh-CN']);
 let language = 'en';
 
 const chinese = Object.freeze({
-  'FINALE / 0.6.0': '终章 / 0.6.0',
+  "Touch": "触屏",
+  "Always show hitbox": "始终显示判定点",
+  "Keep the center hitbox visible without slowing down.": "持续显示机体中心判定点，不改变移动速度。",
+  "Display preferences saved on this device.": "显示偏好已保存在此设备。",
+  "Display preferences applied for this session. Settings could not be saved.": "显示偏好已应用于本次游玩，暂时无法保存。",
+  "Drag anywhere to move. Hold to auto-fire.": "在游戏区域拖动移动，按住自动开火。",
+  "Drag anywhere in the playfield to move. Hold to auto-fire. Use the buttons below for bomb, skill and pause.": "在游戏区域任意位置拖动即可移动，按住自动开火。下方按钮可释放炸弹、技能或暂停。",
+  "Lift your finger to stop firing. Touch again anywhere without moving your ship.": "松手停止开火。重新触碰任意位置，战机不会瞬移。",
+  "Turn Always show hitbox on or off in DISPLAY. Touch movement has no Shift slowdown.": "在「显示设置」中开关「始终显示判定点」。触屏移动无需 Shift 减速。",
+  "Touch flight controls": "触屏飞行操作",
+  "{count} LEFT": "剩余 {count}",
+  "{seconds}s": "{seconds}秒",
+  "RESUME": "继续",
+  "Tap RESUME FLIGHT to continue.": "点击「继续飞行」恢复游戏。",
+  "Next sector incoming. Lift your finger, then touch to fly.": "即将进入下一星区，请松手后重新触碰飞行。",
+  "Drag to move · hold to auto-fire · lift to stop firing": "拖动移动 · 按住自动开火 · 松手停火",
+  'FINALE / 0.6.1': '终章 / 0.6.1',
   'Neon Drift — Finale': 'Neon Drift — 终章',
   'Flight telemetry': '飞行信息',
   'EXPEDITION': '远征航线',
@@ -2374,6 +2569,7 @@ class Renderer {
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d', { alpha: false });
+    this.alwaysShowHitbox = false;
     this.view = canvas.ownerDocument.defaultView || globalThis;
     // Layout is read once on construction. ResizeObserver supplies subsequent
     // content sizes, so the animation loop never needs to force a layout pass.
@@ -2903,7 +3099,7 @@ class Renderer {
       ctx.stroke();
       ctx.restore();
     }
-    if (player.focus) {
+    if (player.focus || this.alwaysShowHitbox) {
       ctx.strokeStyle = 'rgba(117,255,235,0.42)';
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -3450,16 +3646,18 @@ __neonPortableModules["js/display.js"] = (() => {
 const { t: t } = __neonPortableModules["js/i18n.js"];
 
 const DISPLAY_KEY = 'neon-drift-display';
+const HITBOX_KEY = 'neon-drift-always-hitbox';
 const DEFAULTS = { uiSize: '125', gameSize: 'auto' };
 const UI_SIZES = new Set(['100', '125', '150']);
 const GAME_SIZES = new Set(['auto', '100', '125', '150']);
 
-function initDisplaySettings({ onOpen }) {
+function initDisplaySettings({ onOpen, onHitboxChange = () => {} }) {
   const root = document.documentElement;
   const byId = (id) => document.getElementById(id);
   const dialog = byId('display-dialog');
   const uiSize = byId('ui-size');
   const gameSize = byId('game-size');
+  const hitbox = byId('always-show-hitbox');
   const status = byId('display-status');
   const fullscreen = byId('fullscreen-button');
   let statusMessage = '';
@@ -3468,32 +3666,68 @@ function initDisplaySettings({ onOpen }) {
     status.textContent = t(message);
   }
   let settings = { ...DEFAULTS };
+  let alwaysShowHitbox = window.matchMedia?.('(pointer: coarse)').matches ?? false;
   try {
     const saved = JSON.parse(localStorage.getItem(DISPLAY_KEY));
     if (UI_SIZES.has(saved?.uiSize)) settings.uiSize = saved.uiSize;
     if (GAME_SIZES.has(saved?.gameSize)) settings.gameSize = saved.gameSize;
   } catch { /* Defaults work when storage is blocked or invalid. */ }
+  try {
+    const saved = localStorage.getItem(HITBOX_KEY);
+    if (saved === 'true' || saved === 'false') alwaysShowHitbox = saved === 'true';
+  } catch { /* The touch-friendly default still works without storage. */ }
 
   // Measure the surrounding interface, so text scaling never crops gameplay.
   // Settings affect display dimensions; the simulation remains 480 × 720.
   const station = document.querySelector('.station');
+  const arcade = document.querySelector('.arcade');
+  const column = document.querySelector('.game-column');
+  const chromeElements = [document.querySelector('.hud'), document.querySelector('.game-footer'), byId('touch-controls'), byId('touch-hint')].filter(Boolean);
+  const topbar = document.querySelector('.topbar');
+  const pageFooter = document.querySelector('.page-footer');
+  const pixels = (value) => parseFloat(value) || 0;
+  const inFlow = style => style.display !== 'none' && style.position !== 'fixed' && style.position !== 'absolute';
+  function outerHeight(element) {
+    const style = getComputedStyle(element);
+    if (!inFlow(style)) return 0;
+    return element.getBoundingClientRect().height + pixels(style.marginTop) + pixels(style.marginBottom);
+  }
+  function setDimension(name, value) {
+    if (root.style.getPropertyValue(name) !== value) root.style.setProperty(name, value);
+  }
   function fitPlayfield() {
     const sidePanels = getComputedStyle(document.querySelector('.side-panel')).display !== 'none';
-    const gap = parseFloat(getComputedStyle(station).columnGap) || 0;
+    const stationStyle = getComputedStyle(station);
+    const arcadeStyle = getComputedStyle(arcade);
+    const columnStyle = getComputedStyle(column);
+    const gap = pixels(stationStyle.columnGap);
     const sideWidth = sidePanels ? 190 * Number(settings.uiSize) / 100 : 0;
     const availableWidth = Math.max(100, station.clientWidth - (sidePanels ? 2 * (sideWidth + gap) : 0));
-    const chromeHeight = document.querySelector('.topbar').getBoundingClientRect().height
-      + parseFloat(getComputedStyle(station).paddingTop)
-      + document.querySelector('.hud').getBoundingClientRect().height
-      + document.querySelector('.game-footer').getBoundingClientRect().height
-      + document.querySelector('.page-footer').getBoundingClientRect().height + 10;
-    root.style.setProperty('--available-field-w', `${availableWidth}px`);
-    root.style.setProperty('--chrome-h', `${chromeHeight}px`);
+    const visibleChrome = chromeElements.filter(element => inFlow(getComputedStyle(element)));
+    const columnGaps = /flex|grid/.test(columnStyle.display) ? visibleChrome.length * pixels(columnStyle.rowGap) : 0;
+    const chromeHeight = outerHeight(topbar) + outerHeight(pageFooter)
+      + pixels(arcadeStyle.paddingTop) + pixels(arcadeStyle.paddingBottom)
+      + pixels(stationStyle.paddingTop) + pixels(stationStyle.paddingBottom)
+      + visibleChrome.reduce((height, element) => height + outerHeight(element), 0) + columnGaps + 10;
+    setDimension('--available-field-w', `${availableWidth}px`);
+    setDimension('--chrome-h', `${Math.ceil(chromeHeight)}px`);
+    setDimension('--viewport-h', `${window.visualViewport?.height || window.innerHeight}px`);
+  }
+  let resizeFrame = null;
+  function scheduleFit() {
+    if (resizeFrame !== null) return;
+    // Writing size variables inside ResizeObserver can retrigger its delivery.
+    resizeFrame = window.requestAnimationFrame(() => {
+      resizeFrame = null;
+      fitPlayfield();
+    });
   }
 
   function apply() {
     uiSize.value = settings.uiSize;
     gameSize.value = settings.gameSize;
+    hitbox.checked = alwaysShowHitbox;
+    onHitboxChange(alwaysShowHitbox);
     root.style.setProperty('--ui-scale', Number(settings.uiSize) / 100);
     root.style.setProperty('--target-field-h', settings.gameSize === 'auto' ? '10000px' : `${720 * Number(settings.gameSize) / 100}px`);
     fitPlayfield();
@@ -3503,9 +3737,10 @@ function initDisplaySettings({ onOpen }) {
     apply();
     try {
       localStorage.setItem(DISPLAY_KEY, JSON.stringify(settings));
-      setStatus('Sizes saved on this device.');
+      localStorage.setItem(HITBOX_KEY, String(alwaysShowHitbox));
+      setStatus('Display preferences saved on this device.');
     } catch {
-      setStatus('Sizes applied for this session. Settings could not be saved.');
+      setStatus('Display preferences applied for this session. Settings could not be saved.');
     }
   }
 
@@ -3520,6 +3755,10 @@ function initDisplaySettings({ onOpen }) {
   });
   gameSize.addEventListener('change', () => {
     settings.gameSize = GAME_SIZES.has(gameSize.value) ? gameSize.value : DEFAULTS.gameSize;
+    save();
+  });
+  hitbox.addEventListener('change', () => {
+    alwaysShowHitbox = hitbox.checked;
     save();
   });
   byId('reset-display-button').addEventListener('click', () => {
@@ -3543,13 +3782,15 @@ function initDisplaySettings({ onOpen }) {
     syncFullscreen();
   });
   document.addEventListener('fullscreenchange', syncFullscreen);
-  window.addEventListener('resize', fitPlayfield);
+  window.addEventListener('resize', scheduleFit);
+  window.addEventListener('movementchange', scheduleFit);
+  window.visualViewport?.addEventListener('resize', scheduleFit);
   window.addEventListener('languagechange', () => {
     status.textContent = t(statusMessage);
     syncFullscreen();
   });
-  const observer = new ResizeObserver(fitPlayfield);
-  for (const element of [station, document.querySelector('.topbar'), document.querySelector('.hud'), document.querySelector('.game-footer'), document.querySelector('.page-footer')]) observer.observe(element);
+  const observer = new ResizeObserver(scheduleFit);
+  for (const element of [station, topbar, ...chromeElements, pageFooter]) observer.observe(element);
   apply();
   syncFullscreen();
 }
@@ -4005,8 +4246,12 @@ const records = loadRecords(storage);
 let selectedDifficulty = loadDifficulty(storage);
 let selectedFighter = 'kestrel';
 try { selectedFighter = getFighter(storage?.getItem('neon-drift-fighter')).id; } catch { /* Session selection remains available. */ }
-let movementMode = 'keyboard';
-try { if (localStorage.getItem(MOVEMENT_KEY) === 'mouse') movementMode = 'mouse'; } catch { /* Controls also work without storage. */ }
+const movementModes = new Set(['keyboard', 'mouse', 'touch']);
+let movementMode = window.matchMedia?.('(pointer: coarse)').matches ? 'touch' : 'keyboard';
+try {
+  const savedMovement = storage?.getItem(MOVEMENT_KEY);
+  if (movementModes.has(savedMovement)) movementMode = savedMovement;
+} catch { /* Controls also work without storage. */ }
 const scoreText = (score) => String(score).padStart(6, '0');
 const clockText = (time) => `${String(Math.floor(time / 60)).padStart(2, '0')}:${String(Math.floor(time % 60)).padStart(2, '0')}`;
 const setText = (id, value) => { const el = byId(id); if (el.textContent !== value) el.textContent = value; };
@@ -4063,6 +4308,8 @@ const input = new Input(window, {
   isPlaying: () => game.mode === 'playing',
   isPaused: () => game.mode === 'paused',
   isUiActive: () => Boolean(document.querySelector('dialog[open]')),
+  isTouchActive: () => game.mode === 'playing' && game.intermission <= 0,
+  getPlayerPosition: () => ({ x: game.player.x, y: game.player.y }),
   pause: togglePause,
   bomb: () => game.useBomb(),
   skill: () => game.useSkill(),
@@ -4113,6 +4360,7 @@ const hangar = initHangar({
 
 function syncMovementUI() {
   const mouse = movementMode === 'mouse';
+  document.body.dataset.movement = movementMode;
   byId('movement-select').value = movementMode;
   for (const element of document.querySelectorAll('[data-movement]')) element.hidden = element.dataset.movement !== movementMode;
   for (const [id, message] of [
@@ -4124,6 +4372,7 @@ function syncMovementUI() {
   }
   syncBindingHints();
   canvas.classList.toggle('mouse-playing', mouse && game.mode === 'playing');
+  window.dispatchEvent(new Event('movementchange'));
 }
 
 function syncBindingHints() {
@@ -4132,8 +4381,12 @@ function syncBindingHints() {
   for (const element of document.querySelectorAll('[data-binding]')) {
     element.textContent = element.dataset.binding === 'movement' ? movement : list(element.dataset.binding);
   }
-  setText('resume-hint', t('{binding} TO RESUME', { binding: list('pause') }));
+  setText('resume-hint', movementMode === 'touch' ? t('Tap RESUME FLIGHT to continue.') : t('{binding} TO RESUME', { binding: list('pause') }));
   canvas.removeAttribute('data-i18n-aria-label');
+  if (movementMode === 'touch') {
+    canvas.setAttribute('aria-label', t('Drag anywhere in the playfield to move. Hold to auto-fire. Use the buttons below for bomb, skill and pause.'));
+    return;
+  }
   canvas.setAttribute('aria-label', t('Vertical scrolling space shooter. {movement} Fire: {fire}. Focus / hitbox: {focus}. Bomb: {bomb}. Pause / resume: {pause}.', {
     movement: movementMode === 'mouse' ? t('Move the mouse to steer. No mouse button needed.')
       : t('Move up: {up}; down: {down}; left: {left}; right: {right}.', {
@@ -4154,15 +4407,17 @@ byId('movement-select').addEventListener('pointerdown', pauseForMovementSettings
 byId('movement-select').addEventListener('focus', pauseForMovementSettings);
 byId('movement-select').addEventListener('change', () => {
   pauseForMovementSettings();
-  movementMode = byId('movement-select').value === 'mouse' ? 'mouse' : 'keyboard';
+  movementMode = movementModes.has(byId('movement-select').value) ? byId('movement-select').value : 'keyboard';
   input.setMovementMode(movementMode);
   try { localStorage.setItem(MOVEMENT_KEY, movementMode); } catch { /* The selection lasts for this session. */ }
   syncMovementUI();
+  syncUI({ focusMenus: false });
 });
 initControlSettings({ input, onOpen: pauseForMovementSettings, onChange: () => { syncMovementUI(); syncMute(); } });
 syncMovementUI();
 
 initDisplaySettings({
+  onHitboxChange: visible => { renderer.alwaysShowHitbox = visible; },
   onOpen: () => {
     input.clear();
     game.pause('display');
@@ -4198,6 +4453,27 @@ byId('restart-button').addEventListener('click', start);
 byId('pause-restart-button').addEventListener('click', start);
 byId('resume-button').addEventListener('click', togglePause);
 byId('pause-button').addEventListener('click', togglePause);
+for (const [id, action] of [
+  ['touch-bomb', () => game.useBomb()],
+  ['touch-skill', () => game.useSkill()],
+  ['touch-pause', togglePause],
+]) {
+  const button = byId(id);
+  const activate = () => {
+    if (movementMode !== 'touch' || button.disabled || document.querySelector('dialog[open]')) return;
+    if (id !== 'touch-pause' && (game.mode !== 'playing' || game.intermission > 0)) return;
+    audio.unlock();
+    action();
+    syncUI({ focusMenus: false });
+  };
+  button.addEventListener('pointerdown', event => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    activate();
+  });
+  // Pointer actions run on contact; keep keyboard/assistive clicks without firing twice.
+  button.addEventListener('click', event => { if (event.detail === 0) activate(); });
+}
 byId('mute-button').addEventListener('click', () => { mute(); if (game.mode === 'playing') focusGame(); });
 window.addEventListener('pointerdown', () => audio.unlock(), { passive: true });
 window.addEventListener('keydown', () => audio.unlock());
@@ -4210,6 +4486,18 @@ function syncUI({ refreshText = false, focusMenus = true } = {}) {
   setText('skill-name', t(game.fighter.skillName));
   const active = game.skillActiveRemaining > 0;
   const cooling = game.skillCooldownRemaining > 0;
+  const touch = movementMode === 'touch';
+  const touchControlsVisible = touch && (game.mode === 'playing' || game.mode === 'paused');
+  byId('touch-controls').hidden = !touchControlsVisible;
+  byId('touch-hint').hidden = !touchControlsVisible;
+  const touchActionsReady = touch && game.mode === 'playing' && game.intermission <= 0;
+  byId('touch-bomb').disabled = !touchActionsReady || game.bombs <= 0;
+  byId('touch-skill').disabled = !touchActionsReady || cooling;
+  byId('touch-pause').disabled = !touchControlsVisible;
+  setText('touch-bomb-count', t('{count} LEFT', { count: game.bombs }));
+  setText('touch-skill-status', cooling ? t('{seconds}s', { seconds: Math.ceil(game.skillCooldownRemaining) }) : t('READY'));
+  setText('touch-pause-label', t(game.mode === 'paused' ? 'RESUME' : 'PAUSE'));
+  setText('touch-hint', t(game.intermission > 0 ? 'Next sector incoming. Lift your finger, then touch to fly.' : 'Drag to move · hold to auto-fire · lift to stop firing'));
   setText('skill-status', active ? t('ACTIVE {seconds}s', { seconds: Math.ceil(game.skillActiveRemaining) })
     : cooling ? t('RECHARGE {seconds}s', { seconds: Math.ceil(game.skillCooldownRemaining) }) : t('READY'));
   const meter = byId('skill-meter');
